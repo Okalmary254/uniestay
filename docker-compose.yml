@@ -1,0 +1,67 @@
+version: "3.9"
+
+services:
+
+  # ── PostgreSQL ─────────────────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       unistay
+      POSTGRES_USER:     unistay
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-unistay_dev_pass}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U unistay"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Django backend ─────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SECRET_KEY:    ${SECRET_KEY:-django-insecure-docker-dev-key-change-me}
+      DEBUG:         ${DEBUG:-False}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
+      DB_NAME:       unistay
+      DB_USER:       unistay
+      DB_PASSWORD:   ${DB_PASSWORD:-unistay_dev_pass}
+      DB_HOST:       db
+      DB_PORT:       5432
+    volumes:
+      - media_files:/app/media
+      - static_files:/app/staticfiles
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+             python manage.py seed_demo &&
+             gunicorn unistay.wsgi:application
+               --bind 0.0.0.0:8000
+               --workers 3
+               --timeout 120
+               --access-logfile -"
+
+  # ── React frontend (nginx) ─────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  postgres_data:
+  media_files:
+  static_files:

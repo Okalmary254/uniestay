@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  input, select, textarea, button {
+    font-family: inherit;
+  }
+}
+
+@layer components {
+  /* Cards */
+  .card {
+    @apply bg-white border border-gray-200 rounded-xl p-4;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply bg-teal-400 hover:bg-teal-600 text-white text-sm font-medium
+           px-4 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 text-gray-600 text-sm
+           border border-gray-200 px-4 py-2 rounded-lg transition-colors;
+  }
+  .btn-blue {
+    @apply bg-blue-400 hover:bg-blue-600 text-white text-sm font-medium
+           px-4 py-2 rounded-lg transition-colors disabled:opacity-50;
+  }
+  .btn-danger {
+    @apply bg-red-50 hover:bg-red-100 text-red-700 text-sm
+           border border-red-200 px-3 py-1.5 rounded-lg transition-colors;
+  }
+
+  /* Form fields */
+  .field-label {
+    @apply block text-xs font-medium text-gray-500 uppercase tracking-wide mb-1;
+  }
+  .field-input {
+    @apply w-full px-3 py-2 text-sm border border-gray-200 rounded-lg
+           bg-gray-50 text-gray-900 focus:outline-none focus:border-teal-400
+           placeholder-gray-400 transition-colors;
+  }
+
+  /* Badges */
+  .badge-green  { @apply text-xs px-2 py-0.5 rounded-full bg-teal-50 text-teal-800; }
+  .badge-amber  { @apply text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-800; }
+  .badge-blue   { @apply text-xs px-2 py-0.5 rounded-full bg-blue-50 text-blue-800; }
+  .badge-red    { @apply text-xs px-2 py-0.5 rounded-full bg-red-50 text-red-800; }
+  .badge-gray   { @apply text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600; }
+
+  /* Sidebar nav item */
+  .nav-item {
+    @apply flex items-center gap-2.5 px-4 py-2 text-sm text-gray-500
+           cursor-pointer border-l-2 border-transparent transition-colors;
+  }
+  .nav-item:hover { @apply bg-gray-50; }
+  .nav-item.active-student {
+    @apply text-blue-600 bg-blue-50 border-l-blue-400 font-medium;
+  }
+  .nav-item.active-landlord {
+    @apply text-teal-600 bg-teal-50 border-l-teal-400 font-medium;
+  }
+
+  /* Stat card */
+  .stat-card {
+    @apply bg-gray-50 rounded-lg p-3;
+  }
+
+  /* Table row */
+  .trow {
+    @apply flex items-center justify-between py-2 border-b border-gray-100
+           last:border-0 text-sm;
+  }
+  .trow-label { @apply text-xs text-gray-500; }
+}
