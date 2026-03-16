@@ -8,10 +8,17 @@ from .serializers import PropertySerializer, PropertyListSerializer, PropertyIma
 
 class IsLandlord(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user.role == 'landlord'
+
+        return (
+            request.user.is_authenticated and
+            request.user.role == 'landlord'
+        )
 
     def has_object_permission(self, request, view, obj):
-        return obj.landlord == request.user
+        return (
+            request.user.is_authenticated and
+            obj.landlord == request.user
+        )
 
 
 class PropertyListCreateView(generics.ListCreateAPIView):
