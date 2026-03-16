@@ -5,7 +5,20 @@ from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenRefreshView
 from users.views import LoginView, RegisterView
 
+def api_root(request):
+    return JsonResponse({
+        'status': 'ok',
+        'message': 'UniStay API is running',
+        'docs': {
+            'properties':  '/api/v1/properties/',
+            'bookings':    '/api/v1/bookings/',
+            'maintenance': '/api/v1/maintenance/',
+            'admin':       '/admin/',
+        }
+    })
+
 urlpatterns = [
+    path(''),
     path('admin/', admin.site.urls),
 
     # Auth
