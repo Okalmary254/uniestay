@@ -1,12 +1,19 @@
 from pathlib import Path
 from decouple import config
 from datetime import timedelta
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY   = config('SECRET_KEY', default='django-insecure-change-me-in-production')
 DEBUG        = config('DEBUG', default=True, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='uniestay-1.onrender.com,localhost,127.0.0.1').split(',')
+
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='uniestay-1.onrender.com,localhost,127.0.0.1').split(',')
+
+RENDER_EXTERNAL_HOSTNAME = config('RENDER_EXTERNAL_HOSTNAME', default='')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -27,6 +34,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',      # serves static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -56,9 +64,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'unistay.wsgi.application'
 ASGI_APPLICATION  = 'unistay.asgi.application'
 
-USE_POSTGRES = config('USE_POSTGRES', default=False, cast=bool)
 
-if USE_POSTGRES:
+DATABASE_URL = config('DATABASE_URL', default='')
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True,
+        )
+    }
+elif config('USE_POSTGRES', default=False, cast=bool):
     DATABASES = {
         'default': {
             'ENGINE':   'django.db.backends.postgresql',
@@ -91,8 +108,10 @@ TIME_ZONE     = 'Africa/Nairobi'
 USE_I18N      = True
 USE_TZ        = True
 
+# ── Static files (whitenoise serves them in production) ───────────────────────
 STATIC_URL  = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL  = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -110,6 +129,7 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20,
     'EXCEPTION_HANDLER': 'unistay.exceptions.custom_exception_handler',
 }
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME':  timedelta(hours=12),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
@@ -119,7 +139,8 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
-    'http://localhost',
-    'http://127.0.0.1',
+    config('FRONTEND_URL', default=''),
 ]
+
+CORS_ALLOWED_ORIGINS = [url for url in CORS_ALLOWED_ORIGINS if url]
 CORS_ALLOW_CREDENTIALS = True
