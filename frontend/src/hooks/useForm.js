@@ -1,11 +1,4 @@
-/**
- * useForm — lightweight form state manager
- *
- * Usage:
- *   const { values, handle, setValues, reset } = useForm({ name: '', email: '' })
- *
- *   <input name="email" value={values.email} onChange={handle} />
- */
+
 import { useState, useCallback } from 'react'
 
 export default function useForm(initial) {
