@@ -117,7 +117,8 @@ export default function PropertyDetail() {
             <div>
               <p className="text-xs text-gray-400 mb-0.5">Listed by</p>
               <p className="text-sm font-medium text-gray-800">{property.landlord?.first_name} {property.landlord?.last_name}</p>
-              {property.landlord?.phone && <p className="text-xs text-blue-500">{property.landlord.phone}</p>}
+              {property.landlord?.phone && <a href={`tel:${property.landlord.phone}`} className="text-xs text-blue-500"> Call {property.landlord.phone}</a>}<br />
+              {property.landlord.whatsapp && <a href={`https://wa.me/${property.landlord.whatsapp}`} target="_blank" rel="noopener noreferrer" className="text-xs text-green-500 ml-2">WhatsApp</a>}
             </div>
             <div className="text-right">
               <p className="text-xs text-gray-400 mb-0.5">Beds / Baths</p>
