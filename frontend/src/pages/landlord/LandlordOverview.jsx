@@ -36,7 +36,7 @@ export default function LandlordOverview() {
 
   return (
     <div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+      <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 mb-5">
         <StatCard label="Total listings"    value={properties.length} />
         <StatCard label="Active listings"   value={active}            color="green" />
         <StatCard label="Pending bookings"  value={pending.length}    color={pending.length > 0 ? 'amber' : 'default'} />

@@ -31,7 +31,7 @@ export default function StudentOverview() {
   return (
     <div>
       {/* Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+      <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 mb-5">
         <StatCard label="Lease status"    value={active ? 'Active' : 'No lease'} color={active ? 'green' : 'default'} />
         <StatCard label="Monthly rent"    value={prop ? `KSh ${Number(prop.rent).toLocaleString()}` : '—'} />
         <StatCard label="Total paid"      value={`KSh ${totalPaid.toLocaleString()}`} color="green" />

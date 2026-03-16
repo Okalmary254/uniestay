@@ -9,29 +9,29 @@ import StudentDocuments   from './StudentDocuments'
 import StudentProfile     from './StudentProfile'
 
 const NAV = [
-  { to: '/student',              label: 'Overview' },
-  { to: '/student/lease',        label: 'My lease' },
-  { to: '/student/payments',     label: 'Payments' },
-  { to: '/student/maintenance',  label: 'Maintenance' },
-  { to: '/student/documents',    label: 'Documents' },
-  { to: '/student/profile',      label: 'My profile' },
+  { to: '/student',             label: 'Overview' },
+  { to: '/student/lease',       label: 'My lease' },
+  { to: '/student/payments',    label: 'Payments' },
+  { to: '/student/maintenance', label: 'Maintenance' },
+  { to: '/student/profile',     label: 'My profile' },
 ]
 
 export default function StudentDash() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Topbar />
-      <div className="flex" style={{ minHeight: 'calc(100vh - 52px)' }}>
+      <div className="flex" style={{ minHeight: 'calc(100vh - 56px)' }}>
         <Sidebar items={NAV} role="student" />
-        <main className="flex-1 p-5 overflow-y-auto">
+        <main className="flex-1 p-4 md:p-5 overflow-y-auto
+                         pb-24 md:pb-5 min-w-0">
           <Routes>
-            <Route index                  element={<StudentOverview />} />
-            <Route path="lease"           element={<StudentLease />} />
-            <Route path="payments"        element={<StudentPayments />} />
-            <Route path="maintenance"     element={<StudentMaintenance />} />
-            <Route path="documents"       element={<StudentDocuments />} />
-            <Route path="profile"         element={<StudentProfile />} />
-            <Route path="*"               element={<Navigate to="/student" replace />} />
+            <Route index                 element={<StudentOverview />} />
+            <Route path="lease"          element={<StudentLease />} />
+            <Route path="payments"       element={<StudentPayments />} />
+            <Route path="maintenance"    element={<StudentMaintenance />} />
+            <Route path="documents"      element={<StudentDocuments />} />
+            <Route path="profile"        element={<StudentProfile />} />
+            <Route path="*"              element={<Navigate to="/student" replace />} />
           </Routes>
         </main>
       </div>
