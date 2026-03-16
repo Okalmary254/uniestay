@@ -5,7 +5,7 @@ from django.conf.urls.static import static
 from django.http import JsonResponse                          
 from rest_framework_simplejwt.views import TokenRefreshView
 from users.views import LoginView, RegisterView
-from django.core.management import call_command
+
 
 
 def api_root(request):
@@ -19,17 +19,6 @@ def api_root(request):
             'admin':       '/admin/',
         }
     })
-
-def run_migrations(request):
-    secret = request.GET.get('secret')
-    if secret != 'unistay-migrate-2026':
-        return JsonResponse({'error': 'Unauthorized'}, status=401)
-    try:
-        call_command('migrate', '--noinput')
-        call_command('seed_demo')
-        return JsonResponse({'status': 'success', 'message': 'Migrations and seeding completed'})
-    except Exception as e:
-        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
 urlpatterns = [
     path('', api_root),
