@@ -6,7 +6,7 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY   = config('SECRET_KEY', default='django-insecure-change-me-in-production')
-DEBUG        = config('DEBUG', default=False, cast=bool)
+DEBUG        = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='uniestay-1.onrender.com,localhost,127.0.0.1').split(',')
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='uniestay-1.onrender.com,localhost,127.0.0.1').split(',')
@@ -72,7 +72,7 @@ if DATABASE_URL:
         'default': dj_database_url.parse(
             DATABASE_URL,
             conn_max_age=600,
-            ssl_require=True,
+            ssl_require=False,
         )
     }
 elif config('USE_POSTGRES', default=False, cast=bool):
