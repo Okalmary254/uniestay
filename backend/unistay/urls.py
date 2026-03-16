@@ -21,8 +21,7 @@ def api_root(request):
     })
 
 urlpatterns = [
-    path('', api_root),
-    path('run-setup/', run_migrations),                                    
+    path('', api_root),                                  
 
     path('admin/', admin.site.urls),
 
