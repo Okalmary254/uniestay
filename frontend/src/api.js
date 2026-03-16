@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+const BASE_URL = import.meta.env.VITE_API_URL || ''
+
 const api = axios.create({
-  baseURL: '/api/v1',
+  baseURL: `${BASE_URL}/api/v1`,
   headers: { 'Content-Type': 'application/json' },
 })
 
@@ -22,7 +24,10 @@ api.interceptors.response.use(
       try {
         const refresh = localStorage.getItem('refresh')
         if (!refresh) throw new Error('No refresh token')
-        const { data } = await axios.post('/api/v1/auth/token/refresh/', { refresh })
+        const { data } = await axios.post(
+          `${BASE_URL}/api/v1/auth/token/refresh/`,
+          { refresh }
+        )
         localStorage.setItem('access', data.access)
         original.headers.Authorization = `Bearer ${data.access}`
         return api(original)
@@ -41,18 +46,18 @@ export default api
 
 // ── Named helpers ──────────────────────────────────────────────────────────────
 export const authAPI = {
-  register: (data) => api.post('/auth/register/', data),
-  login:    (data) => api.post('/auth/login/', data),
-  profile:  ()     => api.get('/users/me/'),
+  register:      (data) => api.post('/auth/register/', data),
+  login:         (data) => api.post('/auth/login/', data),
+  profile:       ()     => api.get('/users/me/'),
   updateProfile: (data) => api.patch('/users/me/', data),
 }
 
 export const propertiesAPI = {
-  list:         (params) => api.get('/properties/', { params }),
-  get:          (id)     => api.get(`/properties/${id}/`),
-  create:       (data)   => api.post('/properties/', data),
-  update:       (id, data) => api.patch(`/properties/${id}/`, data),
-  remove:       (id)     => api.delete(`/properties/${id}/`),
+  list:         (params)     => api.get('/properties/', { params }),
+  get:          (id)         => api.get(`/properties/${id}/`),
+  create:       (data)       => api.post('/properties/', data),
+  update:       (id, data)   => api.patch(`/properties/${id}/`, data),
+  remove:       (id)         => api.delete(`/properties/${id}/`),
   uploadImages: (id, formData) =>
     api.post(`/properties/${id}/images/`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
@@ -60,14 +65,14 @@ export const propertiesAPI = {
 }
 
 export const bookingsAPI = {
-  list:    ()            => api.get('/bookings/'),
-  get:     (id)          => api.get(`/bookings/${id}/`),
-  create:  (data)        => api.post('/bookings/', data),
-  update:  (id, data)    => api.patch(`/bookings/${id}/`, data),
+  list:   ()           => api.get('/bookings/'),
+  get:    (id)         => api.get(`/bookings/${id}/`),
+  create: (data)       => api.post('/bookings/', data),
+  update: (id, data)   => api.patch(`/bookings/${id}/`, data),
   payments: {
-    list:    ()          => api.get('/bookings/payments/'),
-    create:  (data)      => api.post('/bookings/payments/', data),
-    confirm: (id)        => api.post(`/bookings/payments/${id}/confirm/`),
+    list:    ()        => api.get('/bookings/payments/'),
+    create:  (data)    => api.post('/bookings/payments/', data),
+    confirm: (id)      => api.post(`/bookings/payments/${id}/confirm/`),
   },
 }
 
