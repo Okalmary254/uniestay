@@ -31,6 +31,8 @@ INSTALLED_APPS = [
     'properties',
     'bookings',
     'maintenance',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
